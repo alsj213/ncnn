@@ -17,10 +17,7 @@ def find_version():
     version_minor = re.findall(r"NCNN_VERSION_MINOR (.+?)", version_file)
 
     if version_major and version_minor:
-        if sys.platform == "darwin":
-            ncnn_version = time.strftime("%Y.%m.%d", time.localtime())
-        else:
-            ncnn_version = time.strftime("%Y%m%d", time.localtime())
+        ncnn_version = time.strftime("%Y%m%d", time.localtime())
 
         return version_major[0] + "." + version_minor[0] + "." + ncnn_version
     raise RuntimeError("Unable to find version string.")
@@ -67,6 +64,8 @@ class CMakeBuild(build_ext):
             "-DPYTHON_EXECUTABLE={}".format(sys.executable),
             "-DCMAKE_BUILD_TYPE={}".format(cfg),  # not used on MSVC, but no harm
             "-DNCNN_PYTHON=ON",
+            "-DNCNN_DISABLE_RTTI=OFF",
+            "-DNCNN_DISABLE_EXCEPTION=OFF",
             "-DNCNN_BUILD_BENCHMARK=OFF",
             "-DNCNN_BUILD_EXAMPLES=OFF",
             "-DNCNN_BUILD_TOOLS=OFF",
